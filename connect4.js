@@ -12,18 +12,18 @@ class Player {
 }
 
 class Game {
-  constructor(width, height) {
+  constructor(width, height, player1, player2) {
     this.width = width;
     this.height = height;
-    this.currPlayer = 1;
+    //initialize players, JavaScript board, and game state
+    this.player1 = player1;
+    this.player2 = player2;
+    this.currPlayer = this.player1;
     this.board = [];
     this.isGameOver = false;
+
     this.makeBoard();
     this.makeHtmlBoard();
-  }
-
-  restartGame() {
-    
   }
 
   makeBoard() { //Create board structure in JavaScript, this.board = array of row arrays (this.board[row][column])
@@ -75,11 +75,24 @@ class Game {
   placeInTable(y, x) { //update DOM to include new piece in HTML board.
     const piece = document.createElement('div');
     piece.classList.add('piece');
-    piece.classList.add(`p${this.currPlayer}`);
+    if (this.getCurrentPlayer() === 1) {
+      piece.style.backgroundColor = this.player1.colorValue;
+    } else {
+      piece.style.backgroundColor = this.player2.colorValue;
+    }
     piece.style.top = -50 * (y + 2);
   
     const spot = document.getElementById(`${y}-${x}`);
     spot.append(piece);
+  }
+
+  getCurrentPlayer() {
+    if (this.currPlayer === this.player1) {
+      return 1;
+    }
+    else {
+      return 2;
+    }
   }
 
   announceWinner(msg) { //announce winner of game or DRAW below the game board.
@@ -94,22 +107,24 @@ class Game {
         return;
       }
     
-      this.board[y][x] = this.currPlayer; //In this.board, corresponding place in board array next piece goes =current player (1 or 2).
+      this.board[y][x] = this.currPlayer; //In this.board, corresponding place in board array next piece goes = current player (1 or 2).
       this.placeInTable(y, x); //reflect this on game board
       
       if (this.checkForWin()) {
         this.isGameOver = true;
-        return this.announceWinner(`Player ${this.currPlayer} won!`);
+        formSubmitButton.value = "Play Again";
+        return this.announceWinner(`Player ${this.getCurrentPlayer()} won!`);
       }
       
       // check for tie
       if (this.board.every(row => row.every(cell => cell))) {
         this.isGameOver = true;
+        formSubmitButton.value = "Play Again";
         return this.announceWinner('It is a Tie!');
       }
         
       // switch players
-      this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+      this.currPlayer = this.getCurrentPlayer() === 1 ? this.player2 : this.player1;
     }
   }
 
@@ -158,7 +173,7 @@ const endgameResult = document.getElementById("endgame-result");
 
 playerColorsForm.addEventListener("submit", (event) => { 
   event.preventDefault();
-  formSubmitButton.value = "Start New Game";
+  formSubmitButton.value = "Reset Game";
   endgameResult.innerText = "";
 
   //initialize players and the colors of the game pieces from the form input.
@@ -169,7 +184,7 @@ playerColorsForm.addEventListener("submit", (event) => {
   for (let i = gameBoard.children.length-1; i >= 0; i--) { //reset the game by deleting the current board so you can recreate an empty one.
     gameBoard.children[i].remove();
   }
-  new Game(10,10);
+  new Game(10,10, player1, player2);
 });
 
 /* If I wanted to have multiple Connect Four games at the same time on the screen, I'd add methods to the Game class

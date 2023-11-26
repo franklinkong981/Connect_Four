@@ -7,7 +7,13 @@
     <link rel="stylesheet" href="styles.css"/>
   </head>
   <body>
-    <button id="new-game-button">Start New Game</button>
+    <form id="player-colors-form">
+      <label for="player-1-color">Enter Color for Player 1:</label>
+      <input type="text" id="player-1-color"/>
+      <label for="player-2-color">Enter Color for Player 2:</label>
+      <input type="text" id="player-2-color"/>
+      <input type="submit" id="form-submit-button" value="Start Game"/>
+    </form>
     <div id="game-container">
       <table id="connect4-board"></table>
     </div>

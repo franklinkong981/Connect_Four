@@ -5,6 +5,12 @@
  * board fills (tie)
  */
 
+class Player {
+  constructor(colorValue) {
+    this.colorValue = colorValue;
+  }
+}
+
 class Game {
   constructor(width, height) {
     this.width = width;
@@ -144,10 +150,14 @@ class Game {
   }
 }
 
-const newGameButton = document.querySelector("#new-game-button");
+const playerColorsForm = document.querySelector("#player-colors-form");
+const formSubmitButton = document.querySelector("#form-submit-button");
 const endgameResult = document.getElementById("endgame-result");
-newGameButton.addEventListener("click", () => { 
-  newGameButton.innerText = "Reset Game";
+playerColorsForm.addEventListener("submit", (event) => { 
+  event.preventDefault();
+  formSubmitButton.value = "Start New Game";
+
+  
   endgameResult.innerText = "";
   const gameBoard = document.getElementById('connect4-board'); 
   for (let i = gameBoard.children.length-1; i >= 0; i--) { //reset the game by deleting the current board so you can recreate an empty one.

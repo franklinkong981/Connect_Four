@@ -151,14 +151,20 @@ class Game {
 }
 
 const playerColorsForm = document.querySelector("#player-colors-form");
+const player1Color = document.querySelector("#player-1-color");
+const player2Color = document.querySelector("#player-2-color");
 const formSubmitButton = document.querySelector("#form-submit-button");
 const endgameResult = document.getElementById("endgame-result");
+
 playerColorsForm.addEventListener("submit", (event) => { 
   event.preventDefault();
   formSubmitButton.value = "Start New Game";
-
-  
   endgameResult.innerText = "";
+
+  //initialize players and the colors of the game pieces from the form input.
+  const player1 = new Player(player1Color.value);
+  const player2 = new Player(player2Color.value); 
+
   const gameBoard = document.getElementById('connect4-board'); 
   for (let i = gameBoard.children.length-1; i >= 0; i--) { //reset the game by deleting the current board so you can recreate an empty one.
     gameBoard.children[i].remove();

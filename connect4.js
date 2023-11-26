@@ -15,6 +15,10 @@ class Game {
     this.makeHtmlBoard();
   }
 
+  restartGame() {
+    
+  }
+
   makeBoard() { //Create board structure in JavaScript, this.board = array of row arrays (this.board[row][column])
     for (let y = 0; y < this.height; y++) {
       //Creates a 2-D array with "this.height" number of subarrays of length this.width.
@@ -39,7 +43,6 @@ class Game {
     gameBoard.append(top);
     // make main part of board (cells where a piece can go).
     for (let y = 0; y < this.height; y++) {
-      console.log("We're here");
       const row = document.createElement('tr');
   
       for (let x = 0; x < this.width; x++) {
@@ -73,7 +76,6 @@ class Game {
   }
 
   endGame(msg) { //announce winner of game or DRAW below the game board.
-    const endgameResult = document.getElementById("endgame-result");
     endgameResult.innerText = msg;
   }
 
@@ -137,4 +139,14 @@ class Game {
   }
 }
 
-new Game(10,10); 
+const newGameButton = document.querySelector("#new-game-button");
+const endgameResult = document.getElementById("endgame-result");
+newGameButton.addEventListener("click", () => { 
+  newGameButton.innerText = "Reset Game";
+  endgameResult.innerText = "";
+  const gameBoard = document.getElementById('connect4-board'); 
+  for (let i = gameBoard.children.length-1; i >= 0; i--) { //reset the game by deleting the current board so you can recreate an empty one.
+    gameBoard.children[i].remove();
+  }
+  new Game(10,10);
+});
